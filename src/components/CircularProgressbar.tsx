@@ -1,31 +1,40 @@
 import React, { useEffect, useState } from "react";
 
 type CircularProgressbarProps = {
-  timeInMinutes: number;
+  timeInSeconds: number;
+  pause?: boolean;
 };
 
-function CircularProgressbar({ timeInMinutes }: CircularProgressbarProps) {
+function CircularProgressbar({
+  timeInSeconds,
+  pause = false,
+}: CircularProgressbarProps) {
   const [offset, setOffset] = useState(968);
-
-  const timeInSeconds = timeInMinutes * 60;
 
   const offsetPerSecond = 968 / timeInSeconds;
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setOffset((prevOffset) => {
-        if (prevOffset <= 0) {
-          clearInterval(intervalId);
-          console.log("interval cleared");
-          return 0;
-        }
-        console.log("offset");
-        return prevOffset - offsetPerSecond / 5;
-      });
-    }, 200);
+    let intervalId: number;
+    if (!pause) {
+      intervalId = setInterval(() => {
+        setOffset((prevOffset) => {
+          if (prevOffset <= 0) {
+            clearInterval(intervalId);
+            console.log("interval cleared");
+            return 0;
+          }
+          console.log("offset");
+          return prevOffset - offsetPerSecond / 5;
+        });
+      }, 200);
+    }
 
-    return () => clearInterval(intervalId); // cleanup on unmount
-  }, []);
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId); // cleanup on unmount or when pause is true
+      }
+    };
+  }, [pause]);
 
   return (
     <svg
@@ -51,13 +60,10 @@ function CircularProgressbar({ timeInMinutes }: CircularProgressbarProps) {
         stroke="currentColor"
         strokeLinecap="round"
         strokeWidth="13px"
-        // strokeDasharray="968px"
-        // strokeDashoffset={`${offset}px`}
         style={{
           transition: "all 300ms linear",
           strokeDasharray: "968px",
           strokeDashoffset: `${offset}px`,
-          // strokeDashoffset: `250px`,
         }}
       ></circle>
     </svg>
