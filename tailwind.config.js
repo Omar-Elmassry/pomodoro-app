@@ -12,11 +12,9 @@ export default {
       },
     },
     colors: {
-      accent: "hsl(var(--color-accent) / <alpha-value>)",
-      // accent1: "hsla(0, 91%, 71%, 1)",
-      // accent2: "hsla(182, 91%, 71%, 1)",
-      // accent3: "hsla(284, 89%, 74%, 1)",
+      transparent: "transparent",
 
+      accent: "hsl(var(--color-accent) / <alpha-value>)",
       white: "hsla(0, 0%, 100%, 1)",
       grey: "hsla(229, 52%, 96%, 1)",
       grayishBlue: "hsla(227, 100%, 92%, 1)",

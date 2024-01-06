@@ -3,11 +3,12 @@ import useTheme from "./hooks/useTheme";
 
 import settingsIcon from "./assets/icon-settings.svg";
 import { useEffect, useState } from "react";
+import SettingsDialog from "./components/SettingsDialog";
 
 function App() {
   const theme = useTheme();
 
-  // settings modal state 
+  // settings modal state
   const [showSettings, setShowSettings] = useState(false);
 
   const [pause, setPause] = useState(true);
@@ -46,11 +47,11 @@ function App() {
     };
   }, [pause]);
 
-
-
   return (
     <div className="flex h-full w-full flex-col items-center justify-center text-6xl text-grayishBlue">
       <h1 className="mt-12 text-4xl font-bold">pomodoro</h1>
+
+      <SettingsDialog />
 
       <nav className="z-10 mt-14">
         <ul className="gap- flex items-center justify-center rounded-full bg-darkBlue p-2 text-sm font-bold">
