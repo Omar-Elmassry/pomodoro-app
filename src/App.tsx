@@ -1,7 +1,6 @@
 import CircularProgressbar from "./components/CircularProgressbar";
 import useTheme from "./hooks/useTheme";
 
-import settingsIcon from "./assets/icon-settings.svg";
 import { useEffect, useState } from "react";
 import SettingsDialog from "./components/SettingsDialog";
 
@@ -9,7 +8,7 @@ function App() {
   const theme = useTheme();
 
   // settings modal state
-  const [showSettings, setShowSettings] = useState(false);
+  // const [showSettings, setShowSettings] = useState(false);
 
   const [pause, setPause] = useState(true);
 
@@ -51,8 +50,6 @@ function App() {
     <div className="flex h-full w-full flex-col items-center justify-center text-6xl text-grayishBlue">
       <h1 className="mt-12 text-4xl font-bold">pomodoro</h1>
 
-      <SettingsDialog />
-
       <nav className="z-10 mt-14">
         <ul className="gap- flex items-center justify-center rounded-full bg-darkBlue p-2 text-sm font-bold">
           <li className="">
@@ -85,15 +82,16 @@ function App() {
         </div>
       </div>
 
-      <div className="">
-        <button
-          className="mt-14 focus:outline-none"
+      <div className="mt-14">
+        {/* <button
+          className=" focus:outline-none"
           onClick={() => {
             setPause(!pause);
           }}
         >
-          <img src={settingsIcon} alt="" />
-        </button>
+        </button> */}
+
+        <SettingsDialog />
       </div>
     </div>
   );

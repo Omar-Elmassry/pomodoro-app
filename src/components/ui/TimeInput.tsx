@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import upIcon from "../../assets/icon-arrow-up.svg";
 import downIcon from "../../assets/icon-arrow-down.svg";
@@ -15,24 +15,24 @@ function TimeInput({ inputName, title, defaultValue }: TimeInputProps) {
     if (value) {
       setValue(Number(value));
     }
-  }, []);
+  }, [inputName]);
 
   useEffect(() => {
     const saveValue = (value: number) => {
       localStorage.setItem(inputName, String(value));
     };
     saveValue(value);
-  }, [value]);
+  }, [value, inputName]);
 
   return (
-    <div>
+    <div className="flex items-center justify-between md:flex-col md:items-start">
       <label
         htmlFor={inputName}
-        className="mb-3 text-sm font-bold text-blue/40"
+        className="text-sm font-bold text-blue/40 md:mb-3"
       >
         {title}
       </label>
-      <div className="flex h-12 w-36 justify-between rounded-xl bg-grey p-3 px-4">
+      <div className="flex h-12 max-w-36 justify-between rounded-xl bg-grey p-3 px-4">
         <input
           className="w-1/2 bg-transparent text-sm font-bold focus:outline-0"
           id={inputName}
