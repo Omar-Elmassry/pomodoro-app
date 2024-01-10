@@ -1,18 +1,32 @@
 import CircularProgressbar from "./components/CircularProgressbar";
-import useTheme from "./hooks/useTheme";
-
 import { useEffect, useState } from "react";
 import SettingsDialog from "./components/SettingsDialog";
+import {
+  SettingsContext,
+  useSettingsContext,
+} from "./contexts/SettingsContext";
+import Button from "./components/ui/Button";
+
+type TimerType = "pomodoro" | "shortBreak" | "longBreak";
+
+const timerTabs = [
+  { name: "pomodoro", value: "pomodoro" },
+  { name: "short break", value: "shortBreak" },
+  { name: "long break", value: "longBreak" },
+];
 
 function App() {
-  const theme = useTheme();
-
-  // settings modal state
-  // const [showSettings, setShowSettings] = useState(false);
+  const settings = useSettingsContext();
 
   const [pause, setPause] = useState(true);
 
-  const [time, setTime] = useState(1 * 60);
+  const [timerType, setTimerType] = useState<TimerType>("pomodoro");
+
+  const [time, setTime] = useState(
+    settings && settings[timerType as keyof SettingsContext]
+      ? (settings[timerType as keyof SettingsContext] as number) * 60
+      : 0,
+  );
 
   function timeInMinuetsAndSeconds(time: number) {
     const minutes = Math.floor(time / 60);
@@ -30,10 +44,10 @@ function App() {
         setTime((prevTime) => {
           if (prevTime <= 0) {
             clearInterval(intervalId);
-            console.log("time interval cleared");
+            // console.log("time interval cleared");
             return 0;
           }
-          console.log("prevTime");
+          // console.log("prevTime");
           return prevTime - 1;
         });
       }, 1000);
@@ -46,55 +60,88 @@ function App() {
     };
   }, [pause]);
 
+  useEffect(() => {
+    setPause(true);
+    setTime(
+      settings && settings[timerType as keyof SettingsContext]
+        ? (settings[timerType as keyof SettingsContext] as number) * 60
+        : 0,
+    );
+  }, [timerType, settings]);
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center text-6xl text-grayishBlue">
-      <h1 className="mt-12 text-4xl font-bold">pomodoro</h1>
+      <h1 className=" text-2xl font-bold md:mt-12 md:text-4xl">pomodoro</h1>
 
       <nav className="z-10 mt-14">
-        <ul className="gap- flex items-center justify-center rounded-full bg-darkBlue p-2 text-sm font-bold">
-          <li className="">
-            <button className="rounded-full bg-accent px-4 py-3 font-bold text-darkBlue focus:outline-none ">
-              pomodoro
-            </button>
-          </li>
-          <li className="">
-            <button className="px-4 py-3 opacity-40 focus:outline-none">
-              short break
-            </button>
-          </li>
-          <li className="">
-            <button className="px-4 py-3 opacity-40 focus:outline-none">
-              long break
-            </button>
-          </li>
+        <ul className="gap- flex items-center justify-center rounded-full bg-darkBlue p-2 text-xs font-bold md:text-sm">
+          {timerTabs.map((tab) => (
+            <li key={tab.value} className="">
+              <TimerButton
+                timerType={timerType}
+                setTimerType={setTimerType}
+                name={tab.name}
+                value={tab.value as TimerType}
+              />
+            </li>
+          ))}
         </ul>
       </nav>
 
-      <div className="mt-11 h-[410px] w-[410px] rounded-full bg-clock-gradient p-6 shadow-clock-shadow">
-        <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-darkBlue">
-          <CircularProgressbar timeInSeconds={time} pause={pause} />
-          <div className="w-full text-center text-7xl font-bold">
+      <div className="mt-11 h-72 w-72 shrink-0 rounded-full bg-clock-gradient p-4 shadow-clock-shadow md:h-[410px] md:w-[410px] md:p-5">
+        <div className="isolate flex h-full w-full flex-col items-center justify-center rounded-full bg-darkBlue">
+          <CircularProgressbar
+            timeInSeconds={time}
+            pause={pause}
+            timerType={timerType}
+          />
+          <div className="w-full text-center text-5xl font-bold md:text-7xl">
             {timeInMinuetsAndSeconds(time)}
           </div>
-          <div className="mt-5 text-sm font-bold uppercase tracking-[0.9rem]">
+
+          <Button
+            className="mt-5 rounded-full pl-3 text-sm font-bold uppercase tracking-[0.9rem] hover:text-accent"
+            onClick={() => {
+              setPause(!pause);
+            }}
+          >
             {pause ? "restart" : "pause"}
-          </div>
+          </Button>
         </div>
       </div>
 
       <div className="mt-14">
-        {/* <button
-          className=" focus:outline-none"
-          onClick={() => {
-            setPause(!pause);
-          }}
-        >
-        </button> */}
-
         <SettingsDialog />
       </div>
     </div>
   );
 }
+
+const TimerButton = ({
+  timerType,
+  setTimerType,
+  name,
+  value,
+}: {
+  timerType: TimerType;
+  setTimerType: React.Dispatch<React.SetStateAction<TimerType>>;
+  name: string;
+  value: TimerType;
+}) => {
+  return (
+    <Button
+      className={`rounded-full px-4 py-3 ${
+        timerType === value
+          ? "bg-accent font-bold text-darkBlue"
+          : "text-grayishBlue/40"
+      }`}
+      onClick={() => {
+        setTimerType(value);
+      }}
+    >
+      {name}
+    </Button>
+  );
+};
 
 export default App;

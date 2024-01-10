@@ -1,64 +1,70 @@
-import React, { useEffect, useState } from "react";
+import { FieldValues, UseFormRegister, useFormContext } from "react-hook-form";
 
 function ThemeSection() {
-  const storedTheme = localStorage.getItem("theme");
+  const form = useFormContext();
 
-  const [theme, setTheme] = useState(storedTheme || "default");
+  const { register } = form;
 
-  const handleThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTheme(e.target.value);
-  };
-
-  useEffect(() => {
-    const saveTheme = (theme: string) => {
-      localStorage.setItem("theme", theme);
-      document.body.dataset.theme = theme;
-    };
-    saveTheme(theme);
-  }, [theme]);
+  const themes = [
+    {
+      name: "default",
+      bgClassName: "bg-accent1",
+    },
+    {
+      name: "teal-theme",
+      bgClassName: "bg-accent2",
+    },
+    {
+      name: "purple-theme",
+      bgClassName: "bg-accent3",
+    },
+  ];
 
   return (
     <div className="flex flex-col items-center md:flex-row md:justify-between">
       <h2 className="text-sm font-bold tracking-[5px]">COLOR</h2>
 
       <div className="mt-5 flex gap-4 md:mt-0">
-        <label className="bg-accent1 flex h-10 w-10 items-center justify-center rounded-full font-bold text-blue">
-          <input
-            className="peer hidden"
-            type="radio"
-            name="theme"
-            value={"default"}
-            onChange={handleThemeChange}
-            checked={theme === "default"}
+        {themes.map((theme) => (
+          <ThemeSelector
+            key={theme.name}
+            theme={theme.name}
+            bgClassName={theme.bgClassName}
+            register={register}
           />
-          <CheckMark />
-        </label>
-        <label className="bg-accent2 flex h-10 w-10 items-center justify-center rounded-full font-bold text-blue">
-          <input
-            className="peer hidden"
-            type="radio"
-            name="theme"
-            value={"teal-theme"}
-            onChange={handleThemeChange}
-            checked={theme === "teal-theme"}
-          />
-          <CheckMark />
-        </label>
-        <label className="bg-accent3 flex h-10 w-10 items-center justify-center rounded-full font-bold text-blue">
-          <input
-            className="peer hidden"
-            type="radio"
-            name="theme"
-            value={"purple-theme"}
-            onChange={handleThemeChange}
-            checked={theme === "purple-theme"}
-          />
-          <CheckMark />
-        </label>
+        ))}
       </div>
     </div>
   );
 }
+
+const ThemeSelector = ({
+  theme,
+  register,
+  bgClassName,
+}: {
+  theme: string;
+  bgClassName: string;
+  register: UseFormRegister<FieldValues>;
+}) => {
+  // classnames has to exist here for the tailwind compiler to pick them up
+  // focus-within:ring-accent1 focus-within:ring-accent2 focus-within:ring-accent3
+  return (
+    <label
+      className={`flex h-10 w-10 items-center justify-center rounded-full ${bgClassName} font-bold text-blue ring-grey ring-offset-4 focus-within:ring-2 focus-within:ring-${
+        bgClassName.split("-")[1]
+      } hover:ring-1`}
+    >
+      <input
+        className="peer absolute opacity-0"
+        type="radio"
+        value={theme}
+        {...register("theme")}
+      />
+      <CheckMark />
+    </label>
+  );
+};
 
 function CheckMark() {
   return (

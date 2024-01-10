@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
-
 import upIcon from "../../assets/icon-arrow-up.svg";
 import downIcon from "../../assets/icon-arrow-down.svg";
+import { useFormContext } from "react-hook-form";
+import Button from "./Button";
 type TimeInputProps = {
   title: string;
   inputName: string;
-  defaultValue?: number;
 };
-function TimeInput({ inputName, title, defaultValue }: TimeInputProps) {
-  const [value, setValue] = useState(defaultValue || 0);
 
-  useEffect(() => {
-    const value = localStorage.getItem(inputName);
-    if (value) {
-      setValue(Number(value));
-    }
-  }, [inputName]);
+function TimeInput({ inputName, title }: TimeInputProps) {
+  const form = useFormContext();
 
-  useEffect(() => {
-    const saveValue = (value: number) => {
-      localStorage.setItem(inputName, String(value));
-    };
-    saveValue(value);
-  }, [value, inputName]);
+  const { setValue, register, watch } = form;
+
+  const value = watch(inputName);
 
   return (
     <div className="flex items-center justify-between md:flex-col md:items-start">
@@ -34,32 +24,31 @@ function TimeInput({ inputName, title, defaultValue }: TimeInputProps) {
       </label>
       <div className="flex h-12 max-w-36 justify-between rounded-xl bg-grey p-3 px-4">
         <input
-          className="w-1/2 bg-transparent text-sm font-bold focus:outline-0"
+          className="w-1/2 bg-transparent text-sm font-bold outline-offset-4 focus:outline-0 focus-visible:outline-1"
           id={inputName}
           type="number"
-          value={value}
-          onChange={(e) => {
-            setValue(Number(e.target.value));
-          }}
+          {...register(inputName, { valueAsNumber: true })}
         />
         <div className="flex flex-col gap-2">
-          <button
-            className=""
+          <Button
+            className="opacity-20 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-darkBlue rounded-full"
+            type="button"
             onClick={() => {
-              setValue(value + 1);
+              setValue(inputName, value + 1);
             }}
           >
             <img src={upIcon} alt="" />
-          </button>
+          </Button>
 
-          <button
-            className=""
+          <Button
+            className="opacity-20 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-darkBlue rounded-full"
+            type="button"
             onClick={() => {
-              setValue(value - 1);
+              setValue(inputName, value - 1);
             }}
           >
             <img src={downIcon} alt="" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

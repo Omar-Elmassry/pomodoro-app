@@ -10,6 +10,12 @@ export default {
         "clock-shadow":
           "50px 50px 100px 0px #121530, -50px -50px 100px 0px #272C5A",
       },
+
+      fontFamily: {
+        kumbh: ["Kumbh Sans", "sans-serif"],
+        roboto: ["Roboto Slab", "sans-serif"],
+        mono: ["Space Mono", "monospace"],
+      },
     },
     colors: {
       transparent: "transparent",
