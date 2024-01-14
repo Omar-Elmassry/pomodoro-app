@@ -66,7 +66,7 @@ const ThemeSelector = ({
   );
 };
 
-function CheckMark() {
+const CheckMark = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -78,6 +78,6 @@ function CheckMark() {
       <path stroke="#161932" strokeWidth="2" d="m1 5.5 3.953 3.953L13.405 1" />
     </svg>
   );
-}
+};
 
 export default ThemeSection;

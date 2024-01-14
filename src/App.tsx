@@ -1,15 +1,16 @@
 import CircularProgressbar from "./components/CircularProgressbar";
 import SettingsDialog from "./components/SettingsDialog";
+import TimerButton from "./components/TimerButton";
 import Button from "./components/ui/Button";
 import { TimerType, useTimerContext } from "./contexts/TimerContext";
 
-const timerTabs = [
-  { name: "pomodoro", value: "pomodoro" },
-  { name: "short break", value: "shortBreak" },
-  { name: "long break", value: "longBreak" },
-];
-
 function App() {
+  const timerTabs = [
+    { name: "pomodoro", value: "pomodoro" },
+    { name: "short break", value: "shortBreak" },
+    { name: "long break", value: "longBreak" },
+  ];
+
   const timer = useTimerContext();
 
   const {
@@ -18,7 +19,6 @@ function App() {
     timerType,
     setTimerType,
     timeString,
-    // timerRuns,
     finish,
     restartTimer,
   } = timer;
@@ -70,32 +70,5 @@ function App() {
     </div>
   );
 }
-
-const TimerButton = ({
-  timerType,
-  setTimerType,
-  name,
-  value,
-}: {
-  timerType: TimerType;
-  setTimerType: (timerType: TimerType) => void;
-  name: string;
-  value: TimerType;
-}) => {
-  return (
-    <Button
-      className={`rounded-full px-4 py-3 ${
-        timerType === value
-          ? "bg-accent font-bold text-darkBlue"
-          : "text-grayishBlue/40"
-      }`}
-      onClick={() => {
-        setTimerType(value);
-      }}
-    >
-      {name}
-    </Button>
-  );
-};
 
 export default App;

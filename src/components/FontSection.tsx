@@ -2,13 +2,9 @@ import { FieldValues, UseFormRegister, useFormContext } from "react-hook-form";
 
 function FontSection() {
   const form = useFormContext();
-
   const { register, watch } = form;
-
   const selectedFont = watch("font");
-
   const fonts = ["kumbh", "roboto", "mono"];
-
   return (
     <div className="flex flex-col items-center md:flex-row md:justify-between">
       <h2 className="text-sm font-bold tracking-[5px]">FONT</h2>

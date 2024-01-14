@@ -6,19 +6,16 @@ import { useSettingsContext } from "./SettingsContext";
 export type TimerType = "pomodoro" | "shortBreak" | "longBreak";
 
 type TimerContextType = {
-  start: boolean;
+  restart: boolean;
   time: number;
   pause: boolean;
-  setPause: (pause: boolean) => void;
-  startTimer: () => void;
-  pauseTimer: () => void;
-  restartTimer: () => void;
   timeString: string;
   timerType: TimerType;
-  setTimerType: (timerType: TimerType) => void;
   offset: number;
-  timerRuns: number;
   finish: boolean;
+  setPause: (pause: boolean) => void;
+  restartTimer: () => void;
+  setTimerType: (timerType: TimerType) => void;
 };
 
 const TimerContext = createContext({} as TimerContextType);
@@ -30,42 +27,20 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
 
   const { pomodoro, shortBreak, longBreak } = settings;
 
-  // number of timerRuns
-  const [timerRuns, setTimerRuns] = useState(0);
-
-  // start or pause state
   const [restart, setRestart] = useState(false);
 
-  // finish or not state
   const [finish, setFinish] = useState(false);
 
-  // pause state
   const [pause, setPause] = useState(true);
 
-  // time state
   const [time, setTime] = useState(0);
-  // console.log("🚀 ~ TimerProvider ~ time:", time);
 
-  // timer type state
   const [timerType, setTimerType] = useState<TimerType>("pomodoro");
 
-  // time string state
   const [timeString, setTimeString] = useState("");
-  // console.log("🚀 ~ TimerProvider ~ timeString:", timeString);
 
-  // offset state
   const [offset, setOffset] = useState(968);
 
-  const startTimer = () => {
-    setRestart(true);
-  };
-
-  // pause timer
-  const pauseTimer = () => {
-    setPause(true);
-  };
-
-  // reset timer
   const restartTimer = () => {
     setRestart(true);
   };
@@ -124,10 +99,8 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
 
   // use worker to update time
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ time:", time);
     let worker: Worker;
     if (!pause) {
-      console.log("🚀 ~ useEffect ~ pause:", pause);
       worker = new TimerWorker();
       worker.postMessage({ pause, time });
       worker.onmessage = (e) => {
@@ -142,7 +115,6 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
           if (restart) setRestart(false);
           setTime(0);
           setPause(true);
-          setTimerRuns((prevTimerRuns) => prevTimerRuns + 1);
           setFinish(true);
         }
       };
@@ -150,7 +122,6 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       if (worker) {
         worker.terminate();
-        console.log("🚀 ~ return ~ worker.terminate()");
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -197,7 +168,6 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   }, [timerType, activeTimerTypeTime]);
 
   useEffect(() => {
-    setTimerRuns(0);
     setFinish(false);
   }, [timerType]);
 
@@ -212,18 +182,15 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <TimerContext.Provider
       value={{
-        start: restart,
+        restart,
         time,
         pause,
         setPause,
-        startTimer,
-        pauseTimer,
         restartTimer,
         timeString,
         timerType,
         setTimerType,
         offset,
-        timerRuns,
         finish,
       }}
     >
@@ -232,4 +199,5 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTimerContext = () => useContext(TimerContext);

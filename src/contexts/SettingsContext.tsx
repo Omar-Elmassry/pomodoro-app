@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 export type Theme = "default" | "teal-theme" | "purple-theme";
 export type Font = "kumbh" | "roboto" | "mono";
 
-export type SettingsContext = {
+type SettingsContext = {
   pomodoro: number;
   shortBreak: number;
   longBreak: number;
@@ -100,6 +100,7 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSettingsContext = () => {
   if (!SettingsContext) {
     throw new Error("useSettingsContext must be used within SettingsProvider");

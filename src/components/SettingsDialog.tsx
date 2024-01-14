@@ -83,15 +83,10 @@ function SettingsDialog() {
             onSubmit={handleSubmit(submitSettings)}
           >
             <TimeSection />
-
             <hr className="my-6 border-darkBlue/10" />
-
             <FontSection />
-
             <hr className="my-6 border-darkBlue/10" />
-
             <ThemeSection />
-
             <div className="absolute -bottom-6 left-1/2 h-14 w-32 -translate-x-1/2 rounded-full bg-white ">
               <Button
                 className="h-14 w-32 rounded-full bg-accent1 font-bold text-white ring-1 ring-accent1 hover:bg-accent1/80 focus-visible:outline-accent1"
