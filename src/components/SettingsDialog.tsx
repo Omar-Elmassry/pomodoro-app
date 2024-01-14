@@ -40,7 +40,6 @@ function SettingsDialog() {
   const { handleSubmit, reset } = form;
 
   const submitSettings: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
     settings?.saveFont(data.font as Font);
     settings?.saveTheme(data.theme as Theme);
     settings?.savePomodoro(data.pomodoro);

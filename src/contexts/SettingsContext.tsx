@@ -20,7 +20,7 @@ type SettingsProviderProps = {
   children: React.ReactNode;
 };
 
-export const SettingsContext = createContext<SettingsContext | null>(null);
+export const SettingsContext = createContext({} as SettingsContext);
 
 export const SettingsProvider = ({ children }: SettingsProviderProps) => {
   const themeFromLocalStorage = localStorage.getItem("theme") as Theme;
@@ -105,5 +105,5 @@ export const useSettingsContext = () => {
     throw new Error("useSettingsContext must be used within SettingsProvider");
   }
 
-  return useContext<SettingsContext | null>(SettingsContext);
+  return useContext(SettingsContext);
 };

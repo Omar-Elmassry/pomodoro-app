@@ -1,59 +1,9 @@
-import { useEffect, useState } from "react";
-import {
-  SettingsContext,
-  useSettingsContext,
-} from "../contexts/SettingsContext";
+import { useTimerContext } from "@/contexts/TimerContext";
 
-type CircularProgressbarProps = {
-  timeInSeconds: number;
-  pause?: boolean;
-  timerType: "pomodoro" | "shortBreak" | "longBreak";
-};
+function CircularProgressbar() {
+  const TimerContext = useTimerContext();
 
-function CircularProgressbar({
-  timeInSeconds,
-  pause = false,
-  timerType = "pomodoro",
-}: CircularProgressbarProps) {
-  const settings = useSettingsContext();
-
-  const time =
-    settings && settings[timerType as keyof SettingsContext]
-      ? (settings[timerType as keyof SettingsContext] as number) * 60
-      : 0;
-
-  const [offset, setOffset] = useState(968);
-
-  const offsetPerSecond = 968 / timeInSeconds;
-
-  useEffect(() => {
-    let intervalId: number;
-    if (!pause) {
-      intervalId = setInterval(() => {
-        console.log("interval running");
-
-        setOffset((prevOffset) => {
-          if (prevOffset <= 0) {
-            clearInterval(intervalId);
-            // console.log("interval cleared");
-            return 0;
-          }
-          // console.log("offset");
-          return prevOffset - offsetPerSecond / 10;
-        });
-      }, 100);
-    }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId); // cleanup on unmount or when pause is true
-      }
-    };
-  }, [pause, timerType]);
-
-  useEffect(() => {
-    setOffset(968);
-  }, [timerType, time]);
+  const { offset } = TimerContext;
 
   return (
     <svg
@@ -80,11 +30,6 @@ function CircularProgressbar({
         strokeWidth="13px"
         strokeDasharray={968}
         strokeDashoffset={offset}
-        // style={{
-        //   // transition: "all 300ms linear",
-        //   strokeDasharray: "968px",
-        //   strokeDashoffset: `${offset}px`,
-        // }}
       ></circle>
     </svg>
   );

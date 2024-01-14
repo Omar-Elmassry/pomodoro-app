@@ -1,5 +1,4 @@
 import { FieldValues, UseFormRegister, useFormContext } from "react-hook-form";
-import Button from "./ui/Button";
 
 function FontSection() {
   const form = useFormContext();
@@ -40,7 +39,7 @@ const FontInput = ({
   // fonts classnames has to exist here for the tailwind compiler to pick them up
   // font-kumbh font-roboto font-mono
   return (
-    <Button
+    <label
       className={`flex h-10 w-10 items-center justify-center rounded-full font-${font} font-bold ring-grey ring-offset-4 focus-within:ring-2 focus-within:ring-accent hover:ring-1 ${
         selectedFont === font ? "bg-darkBlue text-white" : "bg-grey text-blue"
       }`}
@@ -52,7 +51,7 @@ const FontInput = ({
         value={font}
         {...register("font")}
       />
-    </Button>
+    </label>
   );
 };
 
