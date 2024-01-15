@@ -25,6 +25,7 @@ Users should be able to:
 - See a circular progress bar that updates every minute and represents how far through their timer they are
 - Customize the appearance of the app with the ability to set preferences for colors and fonts
 - (bonus) app is keyboard friendly
+- (bonus) the app is PWA complaint
 
 ### Screenshot
 
@@ -33,8 +34,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- [Solution URL](https://www.frontendmentor.io/solutions/pomodoro-app-using-react-and-tailwindcss-EY_mgElPaw)
+- [Live Site URL](https://omar-elmassry.github.io/pomodoro-app/)
 
 ## My process
 
@@ -50,6 +51,7 @@ Users should be able to:
 - [tailwindcss](https://tailwindcss.com/) - For styles
 - [react-hook-form](https://react-hook-form.com/) - For managing forms
 - Web workers
+- PWA (progressive web app support)
 
 ### Continued development
 
