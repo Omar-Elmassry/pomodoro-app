@@ -39,7 +39,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [timeString, setTimeString] = useState("");
 
-  const [offset, setOffset] = useState(968);
+  const [offset, setOffset] = useState(0);
 
   const restartTimer = () => {
     setRestart(true);
@@ -49,7 +49,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     let timeoutId: NodeJS.Timeout;
     if (restart) {
       timeoutId = setTimeout(() => {
-        setOffset(968);
+        setOffset(0);
         setPause(false);
         setFinish(false);
       }, 100);
@@ -136,10 +136,10 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
       worker.onmessage = (e) => {
         if (e.data === "tick") {
           setOffset((prevOffset) => {
-            if (prevOffset <= 0) {
-              return 0;
+            if (prevOffset >= 968) {
+              return 968;
             }
-            return prevOffset - offsetPerSecond / 10;
+            return prevOffset + offsetPerSecond / 10;
           });
         }
       };
@@ -164,7 +164,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   }, [restart]);
 
   useEffect(() => {
-    setOffset(968);
+    setOffset(0);
   }, [timerType, activeTimerTypeTime]);
 
   useEffect(() => {
