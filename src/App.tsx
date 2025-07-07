@@ -4,13 +4,15 @@ import TimerButton from "./components/TimerButton";
 import Button from "./components/ui/Button";
 import { TimerType, useTimerContext } from "./contexts/TimerContext";
 
-function App() {
-  const timerTabs = [
-    { name: "pomodoro", value: "pomodoro" },
-    { name: "short break", value: "shortBreak" },
-    { name: "long break", value: "longBreak" },
-  ];
+const timerTabs = [
+  { name: "pomodoro", timerType: "pomodoro" },
+  { name: "short break", timerType: "shortBreak" },
+  { name: "long break", timerType: "longBreak" },
+];
 
+import { useEffect } from "react";
+
+export default function App() {
   const timer = useTimerContext();
 
   const {
@@ -23,6 +25,14 @@ function App() {
     restartTimer,
   } = timer;
 
+  useEffect(() => {
+    if (!pause) {
+      document.title = `${timeString} - ${timerTabs.find(
+        (t) => t.timerType === timerType,
+      )?.name}`;
+    }
+  }, [timeString, timerType, pause]);
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center text-6xl text-grayishBlue">
       <h1 className=" text-2xl font-bold md:mt-12 md:text-4xl">pomodoro</h1>
@@ -30,12 +40,12 @@ function App() {
       <nav className="z-10 mt-14">
         <ul className="gap- flex items-center justify-center rounded-full bg-darkBlue p-2 text-xs font-bold md:text-sm">
           {timerTabs.map((tab) => (
-            <li key={tab.value} className="">
+            <li key={tab.timerType} className="">
               <TimerButton
                 timerType={timerType}
                 setTimerType={setTimerType}
                 name={tab.name}
-                value={tab.value as TimerType}
+                value={tab.timerType as TimerType}
               />
             </li>
           ))}
@@ -70,5 +80,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
