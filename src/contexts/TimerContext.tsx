@@ -178,6 +178,22 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setPause(true);
   }, [pomodoro, shortBreak, longBreak]);
+  
+  useEffect(() => {
+    if (finish) {
+      let audio: HTMLAudioElement | null = null;
+      const baseUrl = import.meta.env.BASE_URL || "/";
+      if (timerType === "pomodoro") {
+        audio = new Audio(baseUrl + "pomodoro-finish.mp3");
+      } else {
+        audio = new Audio(baseUrl + "break-finish.mp3");
+      }
+      audio.play();
+      setFinish(false);
+    }
+    // no cleanup needed as sound is short
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [finish, timerType]);
 
   return (
     <TimerContext.Provider
